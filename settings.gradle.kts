@@ -30,3 +30,5 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":common:resources")
+include(":app-feature:chat")
+include(":app-ui")

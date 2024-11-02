@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -16,18 +17,28 @@ kotlin {
 
         }
         commonMain.dependencies {
-
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
                 implementation(compose.ui)
-                implementation(compose.components.resources)
-
+                api(compose.components.resources)
+                api(libs.lyricist.lyricist)
         }
         iosMain.dependencies {
 
         }
     }
+}
+
+dependencies {
+    add("kspCommonMainMetadata", libs.lyricist.processor)
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
+    if(name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
+
+kotlin.sourceSets.commonMain {
+    kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
 }
 
 compose.resources {
@@ -36,7 +47,7 @@ compose.resources {
 }
 
 android {
-    namespace = "dev.partemy.common.resources"
+    namespace = "dev.partemy.zmeuai.common.resources"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
