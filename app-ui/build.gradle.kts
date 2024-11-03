@@ -17,6 +17,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.common.resources)
+            implementation(projects.common.domain)
 
             api(compose.ui)
             api(compose.foundation)

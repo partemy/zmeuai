@@ -32,7 +32,7 @@ internal object Typography {
         ),
         titleMedium = TextStyle(
             fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Bold,
             fontSize = 16.sp
         ),
         titleSmall = TextStyle(

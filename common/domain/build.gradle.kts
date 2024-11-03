@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+ //   alias(libs.plugins.composeMultiplatform)
+   // alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
@@ -13,12 +13,10 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
-            implementation(compose.preview)
+
         }
         commonMain.dependencies {
-            implementation(projects.appUi)
-            implementation(projects.common.resources)
-            implementation(projects.common.domain)
+
         }
         iosMain.dependencies {
 
@@ -27,7 +25,7 @@ kotlin {
 }
 
 android {
-    namespace = "dev.partemy.zmeuai.app.feature.chat"
+    namespace = "dev.partemy.zmeuai.common.domain"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
