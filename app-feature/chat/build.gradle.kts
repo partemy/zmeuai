@@ -19,6 +19,9 @@ kotlin {
             implementation(projects.appUi)
             implementation(projects.common.resources)
             implementation(projects.common.domain)
+
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
         }
         iosMain.dependencies {
 

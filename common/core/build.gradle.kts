@@ -13,17 +13,15 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
-            implementation(compose.preview)
+            api(libs.koin.android)
+            api(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
-            implementation(projects.common.resources)
+            implementation(projects.appUi)
             implementation(projects.common.domain)
 
-            api(compose.ui)
-            api(compose.foundation)
-            api(compose.material3)
-            api(compose.runtime)
-            api(libs.androidx.lifecycle.viewmodel)
+            api(libs.koin.core)
+            api(libs.koin.compose)
         }
         iosMain.dependencies {
 
@@ -32,7 +30,7 @@ kotlin {
 }
 
 android {
-    namespace = "dev.partemy.zmeuai.app.ui"
+    namespace = "dev.partemy.zmeuai.common.core"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
