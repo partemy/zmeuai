@@ -58,7 +58,7 @@ fun ZmeuaiChatItem(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = chatItem.name,
+                text = if (chatItem.type == ChatItemType.USER) ZmeuaiResources.strings.you else ZmeuaiResources.strings.zmeuai,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,

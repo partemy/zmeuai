@@ -19,6 +19,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.appUi)
             implementation(projects.common.domain)
+            implementation(projects.common.data)
 
             api(libs.koin.core)
             api(libs.koin.compose)
