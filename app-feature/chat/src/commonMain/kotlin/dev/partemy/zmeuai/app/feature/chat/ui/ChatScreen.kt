@@ -6,19 +6,24 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,20 +37,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.WindowInfo
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import dev.partemy.zmeuai.app.ui.components.ChatItemAction
 import dev.partemy.zmeuai.app.ui.components.ZmeuaiChatItem
 import dev.partemy.zmeuai.app.ui.components.ZmeuaiTextField
@@ -58,16 +71,27 @@ import org.koin.compose.koinInject
 import zmeuai.common.resources.generated.resources.Res
 import zmeuai.common.resources.generated.resources.send
 
+
 @Composable
 fun ChatScreen(modifier: Modifier = Modifier, viewModel: ChatViewModel = koinInject()) {
     val uiState = viewModel.uiState.collectAsState()
     ProvideZmeuaiStrings {
         ZmeuaiTheme {
-            Content(
-                chatItems = uiState.value.chat,
-                onActionClick = { },
-                onSendClick = { viewModel.onTriggerEvent(ChatViewEvent.OnSendClick(it)) }
-            )
+            Scaffold(
+                topBar = {
+                    Box(
+                        modifier = Modifier.height(100.dp).fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
+                }
+            ) { innerPadding ->
+                Content(
+                    modifier = Modifier.padding(innerPadding),
+                    chatItems = uiState.value.chat,
+                    onActionClick = { },
+                    onSendClick = { viewModel.onTriggerEvent(ChatViewEvent.OnSendClick(it)) }
+                )
+            }
         }
     }
 }
@@ -82,22 +106,28 @@ private fun Content(
     val lazyColumnState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val textFieldValue = rememberSaveable { mutableStateOf("") }
+    val imePadding = with(LocalDensity.current) {
+        WindowInsets.ime.getBottom(this).toDp() - WindowInsets.navigationBars.getBottom(this)
+            .toDp()
+    }
+    val imeHeight = if (imePadding > 0.dp) imePadding else 0.dp
 
     LaunchedEffect(key1 = chatItems) {
         if (chatItems.isNotEmpty())
-            lazyColumnState.animateScrollToItem(chatItems.lastIndex)
+            lazyColumnState.animateScrollToItem(chatItems.lastIndex, scrollOffset = 20000)
     }
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .windowInsetsPadding(WindowInsets.statusBars)
+            .offset(y = -imeHeight)
             .pointerInput(Unit) { detectTapGestures { keyboardController?.hide() } }
     ) {
         LazyColumn(
             modifier = Modifier.weight(1f),
             state = lazyColumnState,
         ) {
+            item { Spacer(modifier = Modifier.height(imeHeight)) }
             itemsIndexed(chatItems) { index, item ->
                 if (index != 0) HorizontalDivider(
                     thickness = 0.5.dp,
@@ -113,7 +143,7 @@ private fun Content(
             modifier = Modifier,
             value = textFieldValue.value,
             onValueChange = { textFieldValue.value = it },
-            onSendClick = { onSendClick.invoke(textFieldValue.value); textFieldValue.value = ""; },
+            onSendClick = { onSendClick.invoke(textFieldValue.value); textFieldValue.value = "" },
         )
     }
 }
@@ -130,7 +160,6 @@ private fun ChatTextField(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
-            .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(horizontal = 12.dp)
 
     ) {

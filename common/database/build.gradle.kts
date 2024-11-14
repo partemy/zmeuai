@@ -6,8 +6,6 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(17)
-
     androidTarget()
     iosX64()
     iosArm64()
@@ -15,16 +13,10 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
-            api(libs.koin.android)
-            api(libs.koin.androidx.compose)
+
         }
         commonMain.dependencies {
-            implementation(projects.appUi)
-            implementation(projects.common.domain)
-            implementation(projects.common.data)
 
-            api(libs.koin.core)
-            api(libs.koin.compose)
         }
         iosMain.dependencies {
 
@@ -33,7 +25,7 @@ kotlin {
 }
 
 android {
-    namespace = "dev.partemy.zmeuai.common.core"
+    namespace = "dev.partemy.zmeuai.common.database"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

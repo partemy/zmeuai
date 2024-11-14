@@ -46,7 +46,7 @@ class ChatViewModel(
 
                     }
 
-                    ResultState.Loading -> {
+                    is ResultState.Loading -> {
                         setState {
                             currentState.copy(
                                 chat = listOf(

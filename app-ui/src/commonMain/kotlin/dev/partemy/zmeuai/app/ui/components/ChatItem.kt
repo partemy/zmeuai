@@ -32,6 +32,7 @@ import zmeuai.common.resources.generated.resources.cloud_download
 import zmeuai.common.resources.generated.resources.copy
 import zmeuai.common.resources.generated.resources.edit
 import zmeuai.common.resources.generated.resources.eye
+import zmeuai.common.resources.generated.resources.logo
 import zmeuai.common.resources.generated.resources.reload
 import zmeuai.common.resources.generated.resources.send
 
@@ -42,6 +43,9 @@ fun ZmeuaiChatItem(
     chatItem: ChatItem,
     onActionClick: (ChatItemAction) -> Unit,
 ) {
+    val itemName = if (chatItem.type == ChatItemType.USER) ZmeuaiResources.strings.you else ZmeuaiResources.strings.zmeuai
+    val itemImage = if (chatItem.type == ChatItemType.USER) Res.drawable.logo else Res.drawable.logo
+
     Column(
         modifier = modifier.fillMaxWidth().padding(SectionPadding)
     ) {
@@ -58,7 +62,7 @@ fun ZmeuaiChatItem(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = if (chatItem.type == ChatItemType.USER) ZmeuaiResources.strings.you else ZmeuaiResources.strings.zmeuai,
+                text = itemName,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,

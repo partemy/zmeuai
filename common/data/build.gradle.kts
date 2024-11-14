@@ -5,6 +5,8 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain(17)
+
     androidTarget()
     iosX64()
     iosArm64()
