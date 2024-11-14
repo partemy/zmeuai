@@ -22,6 +22,9 @@ kotlin {
             implementation(projects.appUi)
             implementation(projects.common.domain)
             implementation(projects.common.data)
+            implementation(projects.common.database)
+
+            implementation(libs.room.runtime)  //TODO remove
 
             api(libs.koin.core)
             api(libs.koin.compose)

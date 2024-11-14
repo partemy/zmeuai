@@ -7,7 +7,6 @@ import dev.partemy.zmeuai.common.domain.ResultState
 import dev.partemy.zmeuai.common.domain.model.ChatItem
 import dev.partemy.zmeuai.common.domain.model.ChatItemType
 import dev.partemy.zmeuai.common.domain.usecase.GetMessageUseCase
-import dev.partemy.zmeuai.common.resources.ZmeuaiResources
 import kotlinx.coroutines.launch
 
 class ChatViewModel(

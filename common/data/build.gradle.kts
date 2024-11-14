@@ -18,10 +18,10 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.common.domain)
+            implementation(projects.common.database)
             implementation(libs.koin.core)
             implementation(libs.bundles.ktor)
             api(libs.ktor.client.core)
-
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
