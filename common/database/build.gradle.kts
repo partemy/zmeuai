@@ -18,6 +18,7 @@ kotlin {
 
         }
         commonMain.dependencies {
+            implementation(projects.common.domain)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
             implementation(libs.sqlite)

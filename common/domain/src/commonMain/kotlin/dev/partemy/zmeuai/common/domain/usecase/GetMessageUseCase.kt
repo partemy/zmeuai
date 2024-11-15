@@ -6,6 +6,6 @@ import dev.partemy.zmeuai.common.domain.repository.IChatRepository
 class GetMessageUseCase(
     private val chatRepository: IChatRepository
 ) {
-    suspend operator fun invoke(chat: List<ChatItem>, message: String) =
-        chatRepository.getMessage(list = chat, message = message)
+    operator fun invoke() =
+        chatRepository.getChat()
 }

@@ -3,7 +3,7 @@ package dev.partemy.zmeuai.common.domain
 sealed class ResultState<out T> {
     data class Success<out T : Any?>(val data: T) : ResultState<T>()
     data class Failure(val exception: Exception) : ResultState<Nothing>()
-    object Loading : ResultState<Nothing>()
+    class Loading : ResultState<Nothing>()
 }
 
 inline fun <T : Any?> ResultState<T>.isLoading(crossinline action: (isLoading: Boolean) -> Unit): ResultState<T> {

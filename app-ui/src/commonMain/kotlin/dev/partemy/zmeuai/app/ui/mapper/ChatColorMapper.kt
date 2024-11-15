@@ -7,7 +7,7 @@ import dev.partemy.zmeuai.common.domain.model.ChatItemType
 @Composable
 fun MaterialTheme.chatColorOf(chatItemType: ChatItemType) =
     when (chatItemType) {
-        ChatItemType.USER -> MaterialTheme.colorScheme.primary
-        ChatItemType.TEXT -> MaterialTheme.colorScheme.onSurface
-        ChatItemType.IMAGE -> MaterialTheme.colorScheme.onSurface
+        ChatItemType.USER -> colorScheme.primary
+        ChatItemType.TEXT -> colorScheme.onSurface
+        ChatItemType.IMAGE -> colorScheme.onSurface
     }

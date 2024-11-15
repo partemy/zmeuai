@@ -52,7 +52,7 @@ import zmeuai.common.resources.generated.resources.send
 
 @Composable
 fun ChatScreen(modifier: Modifier = Modifier, viewModel: ChatViewModel = koinInject()) {
-    val uiState = viewModel.uiState.collectAsState()
+    val messages = viewModel.messages.collectAsState(initial = emptyList())
     ProvideZmeuaiStrings {
         ZmeuaiTheme {
             Scaffold(
@@ -65,7 +65,7 @@ fun ChatScreen(modifier: Modifier = Modifier, viewModel: ChatViewModel = koinInj
             ) { innerPadding ->
                 Content(
                     modifier = Modifier.padding(innerPadding),
-                    chatItems = uiState.value.chat,
+                    chatItems = messages.value,
                     onActionClick = { },
                     onSendClick = { viewModel.onTriggerEvent(ChatViewEvent.OnSendClick(it)) }
                 )
@@ -157,7 +157,7 @@ private fun ChatTextField(
         Spacer(Modifier.width(12.dp))
         IconButton(
             modifier = Modifier.size(64.dp),
-            onClick = onSendClick,
+            onClick = { if (value.isNotEmpty()) onSendClick.invoke() },
             colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
             Icon(

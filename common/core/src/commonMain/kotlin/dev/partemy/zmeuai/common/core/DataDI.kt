@@ -1,3 +1,3 @@
 package dev.partemy.zmeuai.common.core
 
-val dataModules = repositoryModule + remoteModule
+val dataModules = remoteModule + localDataSourceModule + repositoryModule + databaseModule
