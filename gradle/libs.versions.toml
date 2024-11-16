@@ -19,6 +19,8 @@ ktor = "2.3.12"
 kotlinCoroutines = "1.9.0"
 room = "2.7.0-alpha11"
 sqlite = "2.5.0-alpha11"
+jetbrainsNavigation = "2.8.0-alpha10"
+serialization = "1.7.3"
 
 [libraries]
 
@@ -39,9 +41,8 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 sqlite = { module = "androidx.sqlite:sqlite", version.ref = "sqlite"}
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
-
-
-
+jetbrains-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "jetbrainsNavigation" }
+serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization"}
 
 #android
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }

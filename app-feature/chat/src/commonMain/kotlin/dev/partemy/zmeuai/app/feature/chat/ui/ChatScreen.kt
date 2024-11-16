@@ -46,13 +46,12 @@ import dev.partemy.zmeuai.common.domain.model.ChatItem
 import dev.partemy.zmeuai.common.resources.ProvideZmeuaiStrings
 import dev.partemy.zmeuai.common.resources.ZmeuaiResources
 import org.jetbrains.compose.resources.vectorResource
-import org.koin.compose.koinInject
 import zmeuai.common.resources.generated.resources.Res
 import zmeuai.common.resources.generated.resources.send
 
 
 @Composable
-fun ChatScreen(modifier: Modifier = Modifier, viewModel: ChatViewModel = koinInject()) {
+fun ChatScreen(viewModel: ChatViewModel) {
     val messages = viewModel.messages.collectAsState(initial = emptyList())
     ProvideZmeuaiStrings {
         ZmeuaiTheme {

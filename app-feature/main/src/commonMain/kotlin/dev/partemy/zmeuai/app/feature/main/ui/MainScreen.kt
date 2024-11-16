@@ -75,12 +75,15 @@ val chats = listOf(
 )
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    navigateToChat: (Long) -> Unit,
+    viewModel: MainViewModel
+) {
     ZmeuaiTheme {
         Content(
             modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
             chats = chats,
-            onNewChatClick = { },
+            onNewChatClick = { navigateToChat(1)},
             onSortTextFieldValueChange = { },
             onSortButtonClick = {},
             onChatClick = {}

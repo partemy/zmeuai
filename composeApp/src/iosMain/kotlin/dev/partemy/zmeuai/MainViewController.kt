@@ -5,4 +5,4 @@ import dev.partemy.zmeuai.app.feature.chat.ui.ChatScreen
 import dev.partemy.zmeuai.di.zmeuaiAppDI
 
 
-fun MainViewController() = ComposeUIViewController(configure = { zmeuaiAppDI() }) { ChatScreen() }
+fun MainViewController() = ComposeUIViewController(configure = { zmeuaiAppDI() }) { ZmeuaiApp() }

@@ -39,6 +39,8 @@ kotlin {
             implementation(projects.appFeature.chat)
             implementation(projects.appFeature.main)
             implementation(projects.common.core)
+            implementation(projects.appUi)
+            implementation(projects.common.resources)
         }
     }
 }
