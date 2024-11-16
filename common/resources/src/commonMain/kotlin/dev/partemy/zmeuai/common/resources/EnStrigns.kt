@@ -13,5 +13,15 @@ internal val EnStrings = ZmeuaiStrings(
     download = "Download",
     askMeAnything = "Ask me anything...",
     you = "You",
-    send = "Send"
+    send = "Send",
+    startANewChat = "Start a new chat",
+    with = "With",
+    zmeu_AI = "Zmeu AI",
+    newTopic = "New Topic",
+    chats = "Chats",
+    archived = "Archived",
+    images = "Images",
+    search = "Search",
+    back = "Back",
+    history = "History"
 )

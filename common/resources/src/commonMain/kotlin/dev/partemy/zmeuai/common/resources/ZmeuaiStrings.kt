@@ -10,5 +10,15 @@ data class ZmeuaiStrings(
     val download: String,
     val askMeAnything: String,
     val you: String,
-    val send: String
+    val send: String,
+    val startANewChat: String,
+    val with: String,
+    val zmeu_AI: String,
+    val newTopic: String,
+    val chats: String,
+    val archived: String,
+    val images: String,
+    val search: String,
+    val back: String,
+    val history: String
 )

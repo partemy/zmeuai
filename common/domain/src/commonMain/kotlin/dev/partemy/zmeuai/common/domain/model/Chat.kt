@@ -1,9 +1,8 @@
 package dev.partemy.zmeuai.common.domain.model
 
-
-data class ChatItem(
+data class Chat(
     val chatID: Long,
-    val messageID: Long,
+    val title: String,
     val text: String,
-    val type: ChatItemType,
+    val creationTime: Long,
 )

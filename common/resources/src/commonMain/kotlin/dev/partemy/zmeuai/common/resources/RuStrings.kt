@@ -13,5 +13,15 @@ internal val RuStrings = ZmeuaiStrings(
     download = "Скачать",
     askMeAnything = "Спросите у меня что-нибудь...",
     you = "Вы",
-    send = "Отправить"
+    send = "Отправить",
+    startANewChat = "Начните новый чат",
+    with = "С",
+    zmeu_AI = "Zmeu AI",
+    newTopic = "Новый чат",
+    chats = "Чаты",
+    archived = "В архиве",
+    images = "Картинки",
+    search = "Поиск",
+    back = "Назад",
+    history = "История"
 )

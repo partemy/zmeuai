@@ -26,7 +26,7 @@ class ChatViewModel(
 
     private fun generateMessage(message: String) {
         viewModelScope.launch {
-            generateMessageUseCase.invoke(message)
+            generateMessageUseCase.invoke(message, 0)
         }
     }
 }

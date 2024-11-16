@@ -14,13 +14,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import dev.partemy.zmeuai.app.ui.mapper.chatColorOf
 import dev.partemy.zmeuai.app.ui.values.SectionPadding
 import dev.partemy.zmeuai.common.domain.model.ChatItem
@@ -31,7 +30,6 @@ import zmeuai.common.resources.generated.resources.Res
 import zmeuai.common.resources.generated.resources.cloud_download
 import zmeuai.common.resources.generated.resources.copy
 import zmeuai.common.resources.generated.resources.edit
-import zmeuai.common.resources.generated.resources.eye
 import zmeuai.common.resources.generated.resources.logo
 import zmeuai.common.resources.generated.resources.reload
 import zmeuai.common.resources.generated.resources.send
@@ -43,9 +41,11 @@ fun ZmeuaiChatItem(
     chatItem: ChatItem,
     onActionClick: (ChatItemAction) -> Unit,
 ) {
-    val itemName = if (chatItem.type == ChatItemType.USER) ZmeuaiResources.strings.you else ZmeuaiResources.strings.zmeuai
-    val itemImage = if (chatItem.type == ChatItemType.USER) Res.drawable.logo else Res.drawable.logo
-
+    val itemName =
+        if (chatItem.type == ChatItemType.USER) ZmeuaiResources.strings.you else ZmeuaiResources.strings.zmeuai
+    val itemImage = remember {
+        if (chatItem.type == ChatItemType.USER) Res.drawable.logo else Res.drawable.logo
+    }
     Column(
         modifier = modifier.fillMaxWidth().padding(SectionPadding)
     ) {
@@ -54,7 +54,7 @@ fun ZmeuaiChatItem(
             modifier = Modifier
         ) {
             Image(
-                painterResource(Res.drawable.eye),
+                painterResource(itemImage),
                 contentDescription = null,
                 modifier = Modifier
                     .clip(CircleShape)

@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface IChatLocalDataSource {
     fun getChatItems(): Flow<List<ChatItem>>
-
     suspend fun addChatItem(item: ChatItem)
+    suspend fun getLastMessageID(chatID: Long): Long
 }

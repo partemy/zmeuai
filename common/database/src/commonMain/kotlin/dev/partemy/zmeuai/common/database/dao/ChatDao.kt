@@ -13,4 +13,7 @@ interface ChatDao {
 
     @Query("SELECT * FROM ChatItemEntity")
     fun getAllAsFlow(): Flow<List<ChatItemEntity>>
+
+    @Query("SELECT messageID FROM ChatItemEntity WHERE chatID = :chatID ORDER BY messageID DESC LIMIT 1")
+    suspend fun getLastMessageID(chatID: Long): Long
 }

@@ -5,7 +5,7 @@ import dev.partemy.zmeuai.common.domain.repository.IChatRepository
 class GenerateMessageUseCase(
     private val chatRepository: IChatRepository,
 ) {
-    suspend operator fun invoke(message: String) =
-        chatRepository.generate(message)
+    suspend operator fun invoke(message: String, chatID: Long) =
+        chatRepository.generate(message , chatID = chatID)
 
 }

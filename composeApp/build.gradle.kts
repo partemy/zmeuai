@@ -37,6 +37,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.appFeature.chat)
+            implementation(projects.appFeature.main)
             implementation(projects.common.core)
         }
     }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
 
-@Database(entities = [ChatItemEntity::class], version = 2)
+@Database(entities = [ChatItemEntity::class], version = 3)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class ZmeuaiDatabase : RoomDatabase() {
     abstract fun chatDao(): ChatDao

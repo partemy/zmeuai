@@ -25,21 +25,19 @@ class ChatRepository(
     private val chatLocalDataSource: IChatLocalDataSource,
 ) : IChatRepository {
 
-    override suspend fun generate(message: String) {
-
-        chatLocalDataSource.addChatItem(item = ChatItem(chatID = 0, type = ChatItemType.USER, text = message))
+    override suspend fun generate(message: String, chatID: Long) {
         val chat = getChat().first()
+        addMessageToLocalSource(chatID, message, ChatItemType.USER)
         getMessageFromApi(chat, message).collect { result ->
             when (result) {
-                is ResultState.Success -> {
-                    chatLocalDataSource.addChatItem(item = ChatItem(chatID = 0, type = ChatItemType.TEXT, text = result.data))
-                }
-                is ResultState.Failure -> {
-                    chatLocalDataSource.addChatItem(item = ChatItem(chatID = 0, type = ChatItemType.TEXT, text = result.exception.toString()))
-                }
-                is ResultState.Loading -> {
-                    chatLocalDataSource.addChatItem(item = ChatItem(chatID = 0, type = ChatItemType.TEXT, text = "Loading"))
-                }
+                is ResultState.Success ->
+                    addMessageToLocalSource(chatID, result.data, ChatItemType.TEXT)
+
+                is ResultState.Failure ->
+                    addMessageToLocalSource(chatID, result.exception.toString(), ChatItemType.TEXT)
+
+                is ResultState.Loading -> {}
+
             }
         }
     }
@@ -56,6 +54,22 @@ class ChatRepository(
             ChatDTO(
                 history = chatItems.map { it.toHistory() },
                 new_message = message
+            )
+        )
+    }
+
+    private suspend fun addMessageToLocalSource(
+        chatID: Long,
+        text: String,
+        type: ChatItemType,
+    ) {
+        val messageID = chatLocalDataSource.getLastMessageID(chatID) + 1
+        chatLocalDataSource.addChatItem(
+            item = ChatItem(
+                chatID = chatID,
+                messageID = messageID,
+                type = type,
+                text = text,
             )
         )
     }

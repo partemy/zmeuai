@@ -34,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -83,12 +84,14 @@ private fun Content(
 ) {
     val lazyColumnState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
-    val textFieldValue = rememberSaveable { mutableStateOf("") }
     val imePadding = with(LocalDensity.current) {
         WindowInsets.ime.getBottom(this).toDp() - WindowInsets.navigationBars.getBottom(this)
             .toDp()
     }
     val imeHeight = if (imePadding > 0.dp) imePadding else 0.dp
+    val clip = LocalClipboardManager.current
+
+    val textFieldValue = rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(key1 = chatItems) {
         if (chatItems.isNotEmpty())
@@ -106,7 +109,7 @@ private fun Content(
             state = lazyColumnState,
         ) {
             item { Spacer(modifier = Modifier.height(imeHeight)) }
-            itemsIndexed(chatItems) { index, item ->
+            itemsIndexed(chatItems, key = { _, item -> item.messageID }) { index, item ->
                 if (index != 0) HorizontalDivider(
                     thickness = 0.5.dp,
                     color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)

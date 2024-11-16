@@ -18,4 +18,9 @@ class ChatLocalDataSource(
     override suspend fun addChatItem(item: ChatItem) {
         chatDao.insert(item.toChatItemEntity())
     }
+
+    override suspend fun getLastMessageID(chatID: Long): Long {
+        return chatDao.getLastMessageID(chatID)
+    }
+
 }

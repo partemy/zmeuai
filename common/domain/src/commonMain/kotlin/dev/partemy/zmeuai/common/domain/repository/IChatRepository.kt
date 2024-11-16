@@ -5,6 +5,6 @@ import dev.partemy.zmeuai.common.domain.model.ChatItem
 import kotlinx.coroutines.flow.Flow
 
 interface IChatRepository {
-    suspend fun generate(message: String)
+    suspend fun generate(message: String, chatID: Long)
     fun getChat(): Flow<List<ChatItem>>
 }
