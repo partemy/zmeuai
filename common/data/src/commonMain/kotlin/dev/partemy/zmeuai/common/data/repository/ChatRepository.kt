@@ -4,34 +4,34 @@ import dev.partemy.zmeuai.common.data.local.IChatLocalDataSource
 import dev.partemy.zmeuai.common.data.remote.api.ChatApi
 import dev.partemy.zmeuai.common.data.remote.mapper.toHistory
 import dev.partemy.zmeuai.common.data.remote.model.ChatDTO
-import dev.partemy.zmeuai.common.data.remote.model.History
+import dev.partemy.zmeuai.common.database.entity.ChatItemEntity
 import dev.partemy.zmeuai.common.domain.ResultState
 import dev.partemy.zmeuai.common.domain.model.ChatItem
 import dev.partemy.zmeuai.common.domain.model.ChatItemType
 import dev.partemy.zmeuai.common.domain.repository.IChatRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.lastOrNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.take
 
 class ChatRepository(
     private val chatApi: ChatApi,
     private val chatLocalDataSource: IChatLocalDataSource,
 ) : IChatRepository {
 
+    override fun getChat(chatID: Long): Flow<List<ChatItem>> {
+        return chatLocalDataSource.getChatItemsByChatID(chatID)
+    }
+
     override suspend fun generate(message: String, chatID: Long) {
-        val chat = getChat().first()
+        val chat = getChat(chatID).first()
+        val isFirstMessage = chat.isEmpty()
+        if (isFirstMessage) chatLocalDataSource.editChatTitle(message, id = chatID)
         addMessageToLocalSource(chatID, message, ChatItemType.USER)
         getMessageFromApi(chat, message).collect { result ->
             when (result) {
-                is ResultState.Success ->
+                is ResultState.Success -> {
                     addMessageToLocalSource(chatID, result.data, ChatItemType.TEXT)
+                    if (isFirstMessage) chatLocalDataSource.editChatText(result.data, id = chatID)
+                }
 
                 is ResultState.Failure ->
                     addMessageToLocalSource(chatID, result.exception.toString(), ChatItemType.TEXT)
@@ -40,10 +40,6 @@ class ChatRepository(
 
             }
         }
-    }
-
-    override fun getChat(): Flow<List<ChatItem>> {
-        return chatLocalDataSource.getChatItems()
     }
 
     private suspend fun getMessageFromApi(
@@ -63,13 +59,11 @@ class ChatRepository(
         text: String,
         type: ChatItemType,
     ) {
-        val messageID = chatLocalDataSource.getLastMessageID(chatID) + 1
         chatLocalDataSource.addChatItem(
-            item = ChatItem(
-                chatID = chatID,
-                messageID = messageID,
-                type = type,
-                text = text,
+            ChatItemEntity(
+                chatId = chatID,
+                type = type.name,
+                message = text
             )
         )
     }

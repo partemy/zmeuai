@@ -5,15 +5,14 @@ import dev.partemy.zmeuai.common.domain.model.ChatItem
 import dev.partemy.zmeuai.common.domain.model.ChatItemType
 
 fun ChatItem.toChatItemEntity() = ChatItemEntity(
-    chatID = chatID,
-    messageID = messageID,
+    chatId = chatID,
     type = type.name,
-    message = text,
+    message = text
 )
 
 fun ChatItemEntity.toChatItem() = ChatItem(
-    chatID = chatID,
-    messageID = messageID,
+    chatID = chatId,
+    messageID = chatItemId,
     type = ChatItemType.valueOf(type),
     text = message,
 )

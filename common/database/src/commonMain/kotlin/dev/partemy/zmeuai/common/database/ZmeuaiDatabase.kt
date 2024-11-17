@@ -6,12 +6,13 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import dev.partemy.zmeuai.common.database.dao.ChatDao
+import dev.partemy.zmeuai.common.database.entity.ChatEntity
 import dev.partemy.zmeuai.common.database.entity.ChatItemEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
 
-@Database(entities = [ChatItemEntity::class], version = 3)
+@Database(entities = [ChatItemEntity::class, ChatEntity::class], version = 5)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class ZmeuaiDatabase : RoomDatabase() {
     abstract fun chatDao(): ChatDao

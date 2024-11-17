@@ -6,6 +6,5 @@ class GenerateMessageUseCase(
     private val chatRepository: IChatRepository,
 ) {
     suspend operator fun invoke(message: String, chatID: Long) =
-        chatRepository.generate(message , chatID = chatID)
-
+        chatRepository.generate(message, chatID = chatID)
 }

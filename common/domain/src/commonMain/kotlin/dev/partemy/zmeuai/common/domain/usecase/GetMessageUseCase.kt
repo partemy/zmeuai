@@ -4,8 +4,8 @@ import dev.partemy.zmeuai.common.domain.model.ChatItem
 import dev.partemy.zmeuai.common.domain.repository.IChatRepository
 
 class GetMessageUseCase(
-    private val chatRepository: IChatRepository
+    private val chatRepository: IChatRepository,
 ) {
-    operator fun invoke() =
-        chatRepository.getChat()
+    operator fun invoke(chatID: Long) =
+        chatRepository.getChat(chatID)
 }

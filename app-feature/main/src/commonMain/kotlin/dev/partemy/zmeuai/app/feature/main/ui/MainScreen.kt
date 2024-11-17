@@ -19,7 +19,11 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -27,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -53,40 +58,22 @@ import zmeuai.common.resources.generated.resources.inbox
 import zmeuai.common.resources.generated.resources.logo
 import zmeuai.common.resources.generated.resources.search
 
-val chats = listOf(
-    Chat(
-        chatID = 1,
-        title = "Android Development",
-        text = "Discuss the latest Android features and development practices.",
-        creationTime = 1
-    ),
-    Chat(
-        chatID = 2,
-        title = "Jetpack Compose",
-        text = "Share your experiences and tips on using Jetpack Compose.",
-        creationTime = 1
-    ),
-    Chat(
-        chatID = 3,
-        title = "Kotlin Coroutines",
-        text = "Learn about and discuss Kotlin coroutines for asynchronous programming.",
-        creationTime = 1
-    )
-)
-
 @Composable
 fun MainScreen(
     navigateToChat: (Long) -> Unit,
     viewModel: MainViewModel
 ) {
+    val chats = viewModel.chats.collectAsState(initial = emptyList())
     ZmeuaiTheme {
         Content(
             modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
-            chats = chats,
-            onNewChatClick = { navigateToChat(1)},
+            chats = chats.value.reversed(),
+            onNewChatClick = {
+                viewModel.onTriggerEvent(MainViewEvent.OnAddNewChatClick(navigateToChat));
+            },
             onSortTextFieldValueChange = { },
             onSortButtonClick = {},
-            onChatClick = {}
+            onChatClick = { navigateToChat(it) }
         )
     }
 }
@@ -101,7 +88,7 @@ private fun Content(
     onSortButtonClick: (Int) -> Unit,
     onChatClick: (Long) -> Unit,
 ) {
-
+    val scrollState = rememberScrollState()
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -117,16 +104,16 @@ private fun Content(
             HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
             SortTextField(onTextFieldValueChange = onSortTextFieldValueChange)
             SortButtons(onSortButtonClick = onSortButtonClick)
-            FlowRow(
-                maxItemsInEachRow = 2,
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
+                verticalItemSpacing = SmallPadding,
                 horizontalArrangement = Arrangement.spacedBy(SmallPadding),
-                verticalArrangement = Arrangement.spacedBy(SmallPadding),
-                modifier = Modifier.padding(horizontal = SectionPadding)
+                modifier = Modifier.padding(MediumPadding)
             ) {
-                chats.forEach { chat ->
+                items(chats) { chat ->
                     ChatCard(
                         modifier = Modifier.weight(1f),
-                        title = chat.title,
+                        title = chat.title.ifBlank { "new chat" },
                         text = chat.text,
                         time = chat.creationTime.toString(),
                         onClick = { onChatClick(chat.chatID) }

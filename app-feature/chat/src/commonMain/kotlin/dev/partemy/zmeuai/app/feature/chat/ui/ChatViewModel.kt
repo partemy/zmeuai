@@ -8,6 +8,7 @@ import dev.partemy.zmeuai.common.domain.usecase.GetMessageUseCase
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
+    private val chatID: Long,
     private val getMessageUseCase: GetMessageUseCase,
     private val generateMessageUseCase: GenerateMessageUseCase,
 ) : BaseViewModel<ChatViewState, ChatViewEvent>() {
@@ -22,11 +23,11 @@ class ChatViewModel(
         }
     }
 
-    val messages = getMessageUseCase.invoke()
+    val messages = getMessageUseCase.invoke(chatID)
 
     private fun generateMessage(message: String) {
         viewModelScope.launch {
-            generateMessageUseCase.invoke(message, 0)
+            generateMessageUseCase.invoke(message, chatID)
         }
     }
 }
